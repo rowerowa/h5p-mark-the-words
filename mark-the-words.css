@@ -105,3 +105,11 @@
 button.h5p-retry-button.h5p-retry-button {
   display: none;
 }
+
+.hidden-sr-user
+{position:absolute;
+left:-10000px;
+top:auto;
+width:1px;
+height:1px;
+overflow:hidden;}

@@ -163,7 +163,7 @@ H5P.MarkTheWords = (function ($, Question) {
     // Wrapper
     var $wordContainer = $('<div/>', {
       'class': WORDS_CONTAINER,
-      html: self.createHtmlForWords($.parseHTML(self.params.textField))
+      html: '<span class="hidden-sr-user">Instructions: to navigate the text word by word press Tab key; to select a word press Space bar or return key; to move to the first word in the list press Home; to move to the last word in the list press End. End of instructions.</span>' + self.createHtmlForWords($.parseHTML(self.params.textField))
     });
 
     $wordContainer.find('.' + SELECTABLE_MARK).each(function () {
@@ -191,7 +191,7 @@ H5P.MarkTheWords = (function ($, Question) {
     self.$buttonContainer = $('<div/>', {'class': BUTTON_CONTAINER});
 
     this.addButton('check-answer', this.params.checkAnswerButton, function () {
-      self.setAllSelectable(false);
+//      self.setAllSelectable(false);
       self.feedbackSelectedWords();
       self.hideButton('check-answer');
       if (!self.showEvaluation()) {
@@ -367,7 +367,7 @@ H5P.MarkTheWords = (function ($, Question) {
     this.showEvaluation();
     this.setAllMarks();
     this.hideAllButtons();
-  //  this.setAllSelectable(false);
+    this.setAllSelectable(false);
   };
 
   /**
@@ -606,11 +606,14 @@ H5P.MarkTheWords = (function ($, Question) {
       if (isSelected) {
         if (isAnswer) {
           $word.addClass(CORRECT_MARK);
+		  $word.attr('title', 'correct');
         } else {
           $word.addClass(WRONG_MARK);
+		  $word.attr('title', 'wrong');
         }
       } else if (isAnswer) {
         $word.addClass(MISSED_MARK);
+		$word.attr('title', 'missed');
       }
       $word.removeClass(SELECTED_MARK);
     };

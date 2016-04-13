@@ -19,6 +19,8 @@ H5P.MarkTheWords = (function ($, Question) {
   var SELECTABLE_MARK = "h5p-word-selectable";
   var WORD_DISABLED = "h5p-word-disabled";
 
+  var thecounter = 0;
+
   /**
    * Initialize module.
    *
@@ -117,7 +119,8 @@ H5P.MarkTheWords = (function ($, Question) {
             // Word
             entry = entry.substr(start, end);
             if (entry.length) {
-              html += '<span role="button" tabindex="0" class="' + SELECTABLE_MARK + '">' + entry + '</span>';
+              html += '<span id="markthewords-' + thecounter++ + '" role="button" tabindex="0" class="' + SELECTABLE_MARK + '">' + entry + '</span>';
+
             }
 
             if (suffix !== null) {
@@ -126,7 +129,7 @@ H5P.MarkTheWords = (function ($, Question) {
           });
         }
         else if ((selectableStrings !== null) && text.length) {
-          html += '<span role="button" tabindex="0" class="' + SELECTABLE_MARK + '">' + text + '</span>';
+          html += '<span id="markthewords-' + thecounter++ + '" role="button" tabindex="0" class="' + SELECTABLE_MARK + '">' + text + '</span>';
         }
       }
       else {
@@ -364,7 +367,7 @@ H5P.MarkTheWords = (function ($, Question) {
     this.showEvaluation();
     this.setAllMarks();
     this.hideAllButtons();
-    this.setAllSelectable(false);
+  //  this.setAllSelectable(false);
   };
 
   /**
@@ -472,13 +475,32 @@ H5P.MarkTheWords = (function ($, Question) {
     // Handle click events
     $word.click(function () {
       self.toggleMark();
-    }).keypress(function (e) {
+    }).keydown(function (e) {
       var keyPressed = e.which;
       // 32 - space
-      if (keyPressed === 32) {
-        self.toggleMark();
-        e.preventDefault();
+	  // 13 - enter
+
+	  console.log('key pressed');
+
+      if (keyPressed === 13 || keyPressed === 32) {
+			console.log('enter');
+			self.toggleMark();
+			e.preventDefault();
       }
+
+	  // 35 - end
+	  if (keyPressed === 35) {
+		  document.getElementById('markthewords-' + (thecounter - 1)).focus();
+		  console.log('end');
+		  e.preventDefault();
+	  }
+
+	  // 36 - home
+	  if (keyPressed === 36) {
+		  document.getElementById('markthewords-0').focus();
+		  console.log('home');
+		  e.preventDefault();
+	  }
     });
 
     /**
@@ -546,6 +568,8 @@ H5P.MarkTheWords = (function ($, Question) {
       self.triggerXAPI('interacted');
       $word.toggleClass(SELECTED_MARK);
       isSelected = !isSelected;
+
+	  $word.attr('aria-pressed', isSelected);
     };
 
     /**
